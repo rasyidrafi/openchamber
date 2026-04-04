@@ -12,6 +12,9 @@ export const registerOpenChamberRoutes = (app, dependencies) => {
     readSettingsFromDiskMigrated,
     fetchFreeZenModels,
     getCachedZenModels,
+    registerRuntimeRoutes,
+    listRuntimeBackends,
+    getDefaultRuntimeBackendId,
   } = dependencies;
 
   let cachedModelsMetadata = null;
@@ -281,4 +284,11 @@ export const registerOpenChamberRoutes = (app, dependencies) => {
       }
     }
   });
+
+  if (typeof registerRuntimeRoutes === 'function') {
+    registerRuntimeRoutes(app, {
+      listRuntimeBackends,
+      getDefaultRuntimeBackendId,
+    });
+  }
 };

@@ -65,6 +65,8 @@ import { createNotificationTriggerRuntime } from './lib/notifications/runtime.js
 import { createPushRuntime } from './lib/notifications/push-runtime.js';
 import { createNotificationTemplateRuntime } from './lib/notifications/template-runtime.js';
 import { createGracefulShutdownRuntime } from './lib/opencode/shutdown-runtime.js';
+import { createRuntimeRegistry } from './lib/runtime/registry.js';
+import { registerRuntimeRegistryRoutes } from './lib/runtime/openchamber-runtime-routes.js';
 import webPush from 'web-push';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -109,6 +111,7 @@ const isEnvFlagEnabled = (value) => {
 const PLAN_MODE_EXPERIMENT_ENABLED =
   isEnvFlagEnabled(process.env.OPENCODE_EXPERIMENTAL_PLAN_MODE)
   || isEnvFlagEnabled(process.env.OPENCODE_EXPERIMENTAL);
+const DEFAULT_RUNTIME_BACKEND_ID = 'opencode';
 
 const fsPromises = fs.promises;
 
@@ -573,6 +576,53 @@ const openCodeWatcherRuntime = createOpenCodeWatcherRuntime({
   },
 });
 
+const runtimeRegistry = createRuntimeRegistry({
+  defaultBackendId: DEFAULT_RUNTIME_BACKEND_ID,
+  adapters: [
+    {
+      id: 'opencode',
+      name: 'OpenCode',
+      kind: 'opencode',
+      capabilities: {
+        streaming: true,
+        tools: true,
+        attachments: true,
+        reasoning: true,
+      },
+      availability: () => ({ available: true }),
+      health: () => ({
+        ok: Boolean(openCodePort && isOpenCodeReady && !isRestartingOpenCode),
+        restarting: Boolean(isRestartingOpenCode),
+        ready: Boolean(isOpenCodeReady),
+      }),
+    },
+    {
+      id: 'codex',
+      name: 'Codex',
+      kind: 'cli',
+      capabilities: {
+        streaming: true,
+        tools: true,
+        attachments: false,
+        reasoning: true,
+      },
+      availability: () => ({ available: false, reason: 'Not implemented yet' }),
+    },
+    {
+      id: 'claude',
+      name: 'Claude Code',
+      kind: 'cli',
+      capabilities: {
+        streaming: true,
+        tools: true,
+        attachments: false,
+        reasoning: true,
+      },
+      availability: () => ({ available: false, reason: 'Not implemented yet' }),
+    },
+  ],
+});
+
 
 const serverUtilsRuntime = createServerUtilsRuntime({
   fs,
@@ -890,6 +940,9 @@ async function main(options = {}) {
     modelsMetadataCacheTtl: MODELS_METADATA_CACHE_TTL,
     fetchFreeZenModels,
     getCachedZenModels,
+    registerRuntimeRoutes: registerRuntimeRegistryRoutes,
+    listRuntimeBackends: runtimeRegistry.listBackends,
+    getDefaultRuntimeBackendId: runtimeRegistry.getDefaultBackendId,
   });
   uiAuthController = bootstrapResult.uiAuthController;
 

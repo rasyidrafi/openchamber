@@ -44,6 +44,9 @@ export const createBootstrapRuntime = (dependencies) => {
       modelsMetadataCacheTtl,
       fetchFreeZenModels,
       getCachedZenModels,
+      registerRuntimeRoutes,
+      listRuntimeBackends,
+      getDefaultRuntimeBackendId,
     } = options;
 
     registerServerStatusRoutes(app, {
@@ -106,6 +109,9 @@ export const createBootstrapRuntime = (dependencies) => {
       readSettingsFromDiskMigrated,
       fetchFreeZenModels,
       getCachedZenModels,
+      registerRuntimeRoutes,
+      listRuntimeBackends,
+      getDefaultRuntimeBackendId,
     });
 
     return {
