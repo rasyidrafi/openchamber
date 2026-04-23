@@ -1455,7 +1455,7 @@ export const SessionSidebar: React.FC<SessionSidebarProps> = ({
         <div
           onMouseDown={handleDesktopSidebarDragStart}
           className={cn(
-            'app-region-drag flex h-[var(--oc-header-height,56px)] flex-shrink-0 items-center pr-3',
+            'oc-window-controls-overlay-row app-region-drag flex h-[var(--oc-header-height,56px)] flex-shrink-0 items-center pr-3',
             desktopSidebarTopPaddingClass,
           )}
         >

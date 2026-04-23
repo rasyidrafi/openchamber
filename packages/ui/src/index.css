@@ -526,6 +526,23 @@ svg.animate-spin {
   -webkit-app-region: no-drag;
 }
 
+@media (display-mode: window-controls-overlay) {
+  :root:not(.desktop-runtime) {
+    --oc-titlebar-area-left-inset: env(titlebar-area-x, 0px);
+    --oc-titlebar-area-height: env(titlebar-area-height, 0px);
+    --oc-titlebar-area-right-inset: max(
+      0px,
+      calc(100vw - env(titlebar-area-width, 100vw) - env(titlebar-area-x, 0px))
+    );
+  }
+
+  :root:not(.desktop-runtime) .oc-window-controls-overlay-row {
+    min-height: max(var(--oc-header-height, 56px), var(--oc-titlebar-area-height));
+    padding-left: max(var(--oc-titlebar-area-left-inset), 0px);
+    padding-right: max(var(--oc-titlebar-area-right-inset), 0px);
+  }
+}
+
 .animate-spin-once {
   animation: spin-once 0.5s linear forwards;
 }
