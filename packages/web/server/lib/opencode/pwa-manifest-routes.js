@@ -204,6 +204,7 @@ export const registerPwaManifestRoute = (app, dependencies) => {
       start_url: '/',
       scope: '/',
       display: 'standalone',
+      display_override: ['window-controls-overlay'],
       background_color: '#151313',
       theme_color: '#edb449',
       orientation: 'any',

@@ -154,7 +154,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ isOpen, children, cl
       {isOpen ? (
         <div
           onMouseDown={handleDragStart}
-          className="app-region-drag absolute inset-x-0 top-0 z-20 flex h-[var(--oc-header-height,56px)] items-center justify-end px-3"
+          className="oc-window-controls-overlay-row app-region-drag absolute inset-x-0 top-0 z-20 flex h-[var(--oc-header-height,56px)] items-center justify-end px-3"
           aria-hidden
         >
           <div
